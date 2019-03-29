@@ -6,6 +6,6 @@ import io.reactivex.Single
 import retrofit2.http.GET
 
 interface Api {
-    @GET("/posts")
+    @GET("interview-question-data/metoffice/Rainfall-England.json")
     fun getAllPost(): Single<List<ApiPost>>
 }

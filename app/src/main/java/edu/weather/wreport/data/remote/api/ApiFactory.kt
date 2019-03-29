@@ -28,8 +28,8 @@ object ApiFactory {
     }
 
     private fun makeRetrofit(okHttpClient: OkHttpClient, gson: Gson): Retrofit {
-        return Retrofit.Builder() 
-                .baseUrl("https://jsonplaceholder.typicode.com/")
+        return Retrofit.Builder()
+                .baseUrl("https://s3.eu-west-2.amazonaws.com/")
                 .client(okHttpClient)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
