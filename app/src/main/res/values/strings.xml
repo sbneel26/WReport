@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Weather Report</string>
+    <string name="choose_location">Choose location</string>
+    <string name="choose_climate">Choose climate</string>
+    <string name="previous_statistics">Previous Statistics</string>
 </resources>
