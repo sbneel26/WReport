@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import edu.weather.wreport.domain.model.Post
 import edu.weather.wreport.ui.base.BaseActivity
-import timber.log.Timber
 import javax.inject.Inject
 import android.widget.*
 import edu.weather.wreport.R
@@ -53,7 +52,6 @@ class HomeActivity : BaseActivity(), AdapterView.OnItemSelectedListener, Progres
     }
 
     private fun updateItemList(itemList: ArrayList<Post>?) {
-        Timber.i("updated item called")
         itemList?.let { homeAdapter.set(it) }
     }
 

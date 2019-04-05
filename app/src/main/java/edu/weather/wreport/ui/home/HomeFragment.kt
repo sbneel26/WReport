@@ -14,7 +14,6 @@ import dagger.android.support.AndroidSupportInjection
 import edu.weather.wreport.domain.model.Post
 import edu.weather.wreport.util.Resource
 import kotlinx.android.synthetic.main.fragment_item.*
-import timber.log.Timber
 import javax.inject.Inject
 
 class HomeFragment : Fragment() {
@@ -39,7 +38,6 @@ class HomeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        Timber.i("View Created Called again")
         super.onViewCreated(view, savedInstanceState)
 //        homeViewModel = ViewModelProviders.of(this, ViewModelFactoryUtil().createFor(
 //                HomeViewModel(FetchAllPosts(RepositoryImpl(ApiFactory.makeApi(), PostMapper())))))
@@ -64,7 +62,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateItemList(itemList: ArrayList<Post>?) {
-        Timber.i("updated item called")
         itemList?.let { homeAdapter.set(it) }
     }
 

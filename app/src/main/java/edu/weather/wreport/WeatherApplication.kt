@@ -4,7 +4,6 @@ import com.facebook.stetho.Stetho
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import timber.log.Timber
 import javax.inject.Inject
 
 import android.app.Activity
@@ -23,7 +22,6 @@ class WeatherApplication:Application(),HasSupportFragmentInjector {
         DaggerApplicationComponent.builder()
                 .application(this).build().inject(this)
         if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
             Stetho.initializeWithDefaults(this)
         }
     }

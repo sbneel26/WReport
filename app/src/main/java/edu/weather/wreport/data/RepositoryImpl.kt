@@ -13,7 +13,6 @@ class RepositoryImpl(private val api: Api, private val mapper: PostMapper) : Rep
         val matchingClimate = when (climate) {
             "Min Temperature" -> "Tmin"
             "Max Temperature" -> "Tmax"
-            "Rainfall" -> "Rainfall"
             else -> {
                 "Rainfall"
             }
