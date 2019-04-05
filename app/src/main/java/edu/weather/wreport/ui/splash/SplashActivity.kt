@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
 class SplashActivity : BaseActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Observable.timer(5, TimeUnit.SECONDS, Schedulers.io())
+        Observable.timer(2, TimeUnit.SECONDS, Schedulers.io())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

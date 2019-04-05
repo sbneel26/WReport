@@ -15,10 +15,8 @@ class HomeViewModel(private val fetchAllPosts: FetchAllPosts) : ViewModel() {
 
     fun fetchAllPost(climate: String, location: String): LiveData<Resource<ArrayList<Post>>> {
         fetchAllPosts.execute(climate, location).subscribeOn(Schedulers.computation())
-                .doOnSuccess({posts->postsLiveData.postValue(Resource(ResourceState.SUCCESS,
-                        posts, null))})
-                .doOnError({exception->postsLiveData.postValue(Resource(ResourceState.ERROR, null, exception.message))})
-                .subscribe()
+                .doOnSuccess { posts->postsLiveData.postValue(Resource(ResourceState.SUCCESS, posts, null))}
+                .doOnError { exception->postsLiveData.postValue(Resource(ResourceState.ERROR, null, exception.message))}.subscribe()
         return postsLiveData
     }
 

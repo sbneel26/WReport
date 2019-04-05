@@ -12,13 +12,13 @@ import edu.weather.wreport.ui.base.BaseActivity
 import timber.log.Timber
 import javax.inject.Inject
 import android.widget.*
+import edu.weather.wreport.R
 import kotlinx.android.synthetic.main.activity_home.*
 
 fun Context.homeActivityIntent(): Intent {
     return Intent(this, HomeActivity::class.java)
 }
-class HomeActivity : BaseActivity(), AdapterView.OnItemSelectedListener, View.OnClickListener {
-
+class HomeActivity : BaseActivity(), AdapterView.OnItemSelectedListener, ProgressDisplay {
     private lateinit var climateSpinner: Spinner
     private lateinit var locationsSpinner: Spinner
     @Inject
@@ -35,6 +35,7 @@ class HomeActivity : BaseActivity(), AdapterView.OnItemSelectedListener, View.On
             if (homeFragment != null) {
                 if ( climateSpinner.selectedItem.toString() != "Select Climate"
                 && locationsSpinner.selectedItem.toString() != "Select Location") {
+                    homeFragment!!.refreshList()
                     homeFragment!!.fetchResult(climateSpinner.selectedItem.toString(), locationsSpinner.selectedItem.toString())
                 } else {
                     showAlert("Please select climate and location")
@@ -182,9 +183,7 @@ class HomeActivity : BaseActivity(), AdapterView.OnItemSelectedListener, View.On
                 "Wales")
     }
 
-
     override fun onNothingSelected(p0: AdapterView<*>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
@@ -207,7 +206,16 @@ class HomeActivity : BaseActivity(), AdapterView.OnItemSelectedListener, View.On
         }
     }
 
-    override fun onClick(p0: View?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun showProgress() {
+        findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
     }
+
+    override fun hideProgress() {
+        findViewById<ProgressBar>(R.id.progressBar).visibility = View.INVISIBLE
+    }
+}
+
+internal interface ProgressDisplay {
+    fun showProgress()
+    fun hideProgress()
 }

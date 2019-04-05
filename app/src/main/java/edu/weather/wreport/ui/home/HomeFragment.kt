@@ -17,8 +17,6 @@ import kotlinx.android.synthetic.main.fragment_item.*
 import timber.log.Timber
 import javax.inject.Inject
 
-
-
 class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     @Inject lateinit var homeModelFactory: ViewModelProvider.Factory
@@ -53,8 +51,9 @@ class HomeFragment : Fragment() {
     }
 
     fun fetchResult(climate: String, location: String) {
+        showProgress()
         homeViewModel.fetchAllPost(climate, location).observe(this, Observer<Resource<ArrayList<Post>>> {
-            Timber.i("Post size ::" + it?.data?.size)
+            hideProgress()
             updateItemList(it?.data)
         })
     }
@@ -67,5 +66,17 @@ class HomeFragment : Fragment() {
     private fun updateItemList(itemList: ArrayList<Post>?) {
         Timber.i("updated item called")
         itemList?.let { homeAdapter.set(it) }
+    }
+
+    private fun showProgress() {
+        if (activity is ProgressDisplay) {
+            (activity as ProgressDisplay).showProgress()
+        }
+    }
+
+    private fun hideProgress() {
+        if (activity is ProgressDisplay) {
+            (activity as ProgressDisplay).hideProgress()
+        }
     }
 }
