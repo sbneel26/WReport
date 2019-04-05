@@ -9,11 +9,10 @@ import edu.weather.wreport.R
 import edu.weather.wreport.domain.model.Post
 import javax.inject.Inject
 
-
 class  HomeItemListAdapter@Inject constructor() : RecyclerView.Adapter<HomeItemListAdapter.ViewHolder>() {
 
-    private var itemList: List<Post> = arrayListOf()
-    fun set(itemList: List<Post>) {
+    private var itemList: ArrayList<Post> = arrayListOf()
+    fun set(itemList: ArrayList<Post>) {
         this.itemList = itemList
         notifyDataSetChanged()
     }
@@ -22,7 +21,7 @@ class  HomeItemListAdapter@Inject constructor() : RecyclerView.Adapter<HomeItemL
         val homeItemUIModel = itemList[position]
         holder.userIdText.text = homeItemUIModel.tempId.toString()
         holder.postIdText.text = homeItemUIModel.year.toString()
-        holder.bodyText.text = homeItemUIModel.month.toString()
+        holder.bodyText.text = homeItemUIModel.month
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -40,5 +39,10 @@ class  HomeItemListAdapter@Inject constructor() : RecyclerView.Adapter<HomeItemL
         val userIdText: TextView = view.findViewById(R.id.tempId)
         val postIdText: TextView = view.findViewById(R.id.yearId)
         var bodyText: TextView = view.findViewById(R.id.month)
+    }
+
+    fun clearData() {
+        // clear the data
+        itemList.clear()
     }
 }

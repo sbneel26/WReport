@@ -8,7 +8,17 @@ import io.reactivex.Single
 
 class RepositoryImpl(private val api: Api, private val mapper: PostMapper) : Repository {
 
-    override fun getAllPost(): Single<List<Post>> {
-           return api.getAllPost().flatMap(mapper)
+    override fun getAllPost(climate: String, location: String): Single<ArrayList<Post>> {
+        var url = "interview-question-data/metoffice/"
+        val matchingClimate = when (climate) {
+            "Min Temperature" -> "Tmin"
+            "Max Temperature" -> "Tmax"
+            "Rainfall" -> "Rainfall"
+            else -> {
+                "Rainfall"
+            }
+        }
+        url = url.plus(matchingClimate).plus("-").plus(location).plus(".json")
+        return api.getAllPost(url).flatMap(mapper)
     }
 }

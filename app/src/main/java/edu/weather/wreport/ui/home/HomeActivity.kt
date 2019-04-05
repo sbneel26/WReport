@@ -1,66 +1,70 @@
 package edu.weather.wreport.ui.home
 
-import android.arch.lifecycle.ViewModelProvider
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import edu.weather.wreport.R
 import edu.weather.wreport.domain.model.Post
 import edu.weather.wreport.ui.base.BaseActivity
 import timber.log.Timber
 import javax.inject.Inject
 import android.widget.*
-import edu.rush.myrush.ui.home.HomeFragment
 import kotlinx.android.synthetic.main.activity_home.*
 
 fun Context.homeActivityIntent(): Intent {
     return Intent(this, HomeActivity::class.java)
 }
-
 class HomeActivity : BaseActivity(), AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     private lateinit var climateSpinner: Spinner
     private lateinit var locationsSpinner: Spinner
-    private lateinit var homeViewModel: HomeViewModel
-    @Inject
-    lateinit var homeModelFactory: ViewModelProvider.Factory
     @Inject
     lateinit var homeAdapter: HomeItemListAdapter
-
+    private var homeFragment: HomeFragment? = null
     override fun onCreate(savedInstanceState: Bundle?) {
 //        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        setContentView(edu.weather.wreport.R.layout.activity_home)
         setUpToolBar()
         setUpItemList()
         addDropDownControls()
+        button_previous_stats.setOnClickListener {
+            if (homeFragment != null) {
+                if ( climateSpinner.selectedItem.toString() != "Select Climate"
+                && locationsSpinner.selectedItem.toString() != "Select Location") {
+                    homeFragment!!.fetchResult(climateSpinner.selectedItem.toString(), locationsSpinner.selectedItem.toString())
+                } else {
+                    showAlert("Please select climate and location")
+                }
+            }
+        }
     }
 
-    private fun updateItemList(itemList: List<Post>?) {
+    private fun showAlert(msg: String) {
+        AlertDialog.Builder(this)
+                .setTitle("Alert")
+                .setMessage(msg)
+                .setPositiveButton(android.R.string.ok, null)
+                .show()
+    }
+
+    private fun updateItemList(itemList: ArrayList<Post>?) {
         Timber.i("updated item called")
         itemList?.let { homeAdapter.set(it) }
     }
 
     private fun setUpItemList() {
-        var homeFragment: HomeFragment? = supportFragmentManager.findFragmentById(R.id.contentFrame) as? HomeFragment
+        homeFragment = supportFragmentManager.findFragmentById(edu.weather.wreport.R.id.contentFrame) as? HomeFragment
         if (homeFragment == null) {
             // Create the fragment
             homeFragment = HomeFragment.newInstance()
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.contentFrame, homeFragment, HomeFragment.TAG)
+                    .replace(edu.weather.wreport.R.id.contentFrame, homeFragment, HomeFragment.TAG)
                     .commit()
-        }
-//        homeViewModel = ViewModelProviders.of(this, homeModelFactory).get(HomeViewModel::class.java)
-//        item_list.layoutManager = LinearLayoutManager(this)
-//        //homeAdapter = HomeItemListAdapter(arrayListOf())
-//        item_list.adapter = homeAdapter
-//        homeViewModel.fetchAllPost().observe(this, Observer<Resource<List<Post>>> {
-//            Timber.i("Post size ::" + it?.data?.size)
-//            updateItemList(it?.data)
-//        })
+            }
     }
 
     private fun setUpToolBar() {
@@ -70,17 +74,16 @@ class HomeActivity : BaseActivity(), AdapterView.OnItemSelectedListener, View.On
     private fun addDropDownControls() {
         addSpinner1()
         addListenerOnSpinner1ItemSelection()
-        //addDatePicker()
         addSpinner2()
         addListenerOnSpinner2ItemSelection()
     }
 
     private fun addSpinner1() {
-        climateSpinner = findViewById(R.id.climate_spinner)
+        climateSpinner = findViewById(edu.weather.wreport.R.id.climate_spinner)
         //Adapter for spinner
-        climateSpinner.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, getClimateValues())
+        climateSpinner.adapter = ArrayAdapter(this, edu.weather.wreport.R.layout.support_simple_spinner_dropdown_item, getClimateValues())
         // Initialize an array adapter
-        val mAdapter: ArrayAdapter<*>? = object : ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getClimateValues()) {
+        val mAdapter: ArrayAdapter<*>? = object : ArrayAdapter<String>(this, edu.weather.wreport.R.layout.support_simple_spinner_dropdown_item, getClimateValues()) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 // Cast the spinner collapsed item (non-popup item) as a text view
                 val tv = super.getView(position, convertView, parent) as TextView
@@ -99,10 +102,10 @@ class HomeActivity : BaseActivity(), AdapterView.OnItemSelectedListener, View.On
                 tv.setTextColor(Color.BLACK)
 
                 // If this item is selected item
-//                if (position == 0) {
-//                    // Set spinner selected popup item's text color
-//                    tv.setTextColor(Color.RED)
-//                }
+                if (position == 0) {
+                    // Set spinner selected popup item's text color
+                    tv.setTextColor(Color.RED)
+                }
 
                 // Return the modified view
                 return tv
@@ -117,12 +120,12 @@ class HomeActivity : BaseActivity(), AdapterView.OnItemSelectedListener, View.On
     }
 
     private fun addSpinner2() {
-        locationsSpinner = findViewById(R.id.location_spinner)
+        locationsSpinner = findViewById(edu.weather.wreport.R.id.location_spinner)
         //Adapter for spinner
-        locationsSpinner.adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, getLocationsValues())
+        locationsSpinner.adapter = ArrayAdapter(this, edu.weather.wreport.R.layout.support_simple_spinner_dropdown_item, getLocationsValues())
 
         // Initialize an array adapter
-        val mAdapter: ArrayAdapter<*>? = object : ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getLocationsValues()) {
+        val mAdapter: ArrayAdapter<*>? = object : ArrayAdapter<String>(this, edu.weather.wreport.R.layout.support_simple_spinner_dropdown_item, getLocationsValues()) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 // Cast the spinner collapsed item (non-popup item) as a text view
                 val tv = super.getView(position, convertView, parent) as TextView
@@ -140,11 +143,11 @@ class HomeActivity : BaseActivity(), AdapterView.OnItemSelectedListener, View.On
                 // Set the text color of drop down items
                 tv.setTextColor(Color.BLACK)
 
-                // If this item is selected item
-//                if (position == 0) {
-//                    // Set spinner selected popup item's text color
-//                    tv.setTextColor(Color.RED)
-//                }
+//                 If this item is selected item
+                if (position == 0) {
+                    // Set spinner selected popup item's text color
+                    tv.setTextColor(Color.RED)
+                }
 
                 // Return the modified view
                 return tv
@@ -164,6 +167,7 @@ class HomeActivity : BaseActivity(), AdapterView.OnItemSelectedListener, View.On
 
     private fun getClimateValues() : Array<String> {
         return arrayOf(
+                "Select Climate",
                 "Min Temperature",
                 "Max Temperature",
                 "Rainfall(mm)")
@@ -171,6 +175,7 @@ class HomeActivity : BaseActivity(), AdapterView.OnItemSelectedListener, View.On
 
     private fun getLocationsValues() : Array<String> {
         return arrayOf(
+                "Select Location",
                 "UK",
                 "England",
                 "Scotland",
@@ -185,16 +190,16 @@ class HomeActivity : BaseActivity(), AdapterView.OnItemSelectedListener, View.On
     override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
-        val s = findViewById<Spinner>(R.id.climate_spinner)
+        val s = findViewById<Spinner>(edu.weather.wreport.R.id.climate_spinner)
         val a = s.adapter as BaseAdapter
         if (parent == s) {
-            val gender = climateSpinner.selectedItem.toString()
+            val climateVal = climateSpinner.selectedItem.toString()
             //if (gender == getString(edu.rush.mobile.R.string.gender)) {
             //}
             a.notifyDataSetChanged()
         }
 
-        val s2 = findViewById<Spinner>(R.id.location_spinner)
+        val s2 = findViewById<Spinner>(edu.weather.wreport.R.id.location_spinner)
         val a2 = s2.adapter as BaseAdapter
         if (parent == s2) {
 

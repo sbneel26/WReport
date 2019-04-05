@@ -4,5 +4,5 @@ import edu.weather.wreport.domain.model.Post
 import io.reactivex.Single
 
 interface Repository {
-    fun getAllPost() : Single<List<Post>>
+    fun getAllPost(climate: String, location: String) : Single<ArrayList<Post>>
 }

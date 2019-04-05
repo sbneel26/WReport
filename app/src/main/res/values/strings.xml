@@ -3,4 +3,8 @@
     <string name="choose_location">Choose location</string>
     <string name="choose_climate">Choose climate</string>
     <string name="previous_statistics">Previous Statistics</string>
+    <string name="temperature">Temperature</string>
+    <string name="separator">/</string>
+    <string name="year">year</string>
+    <string name="month">month</string>
 </resources>

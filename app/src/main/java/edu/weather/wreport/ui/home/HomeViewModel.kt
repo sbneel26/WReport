@@ -11,10 +11,10 @@ import io.reactivex.schedulers.Schedulers
 
 class HomeViewModel(private val fetchAllPosts: FetchAllPosts) : ViewModel() {
 
-    private val postsLiveData: MutableLiveData<Resource<List<Post>>> = MutableLiveData()
+    private val postsLiveData: MutableLiveData<Resource<ArrayList<Post>>> = MutableLiveData()
 
-    fun fetchAllPost(): LiveData<Resource<List<Post>>> {
-        fetchAllPosts.execute().subscribeOn(Schedulers.computation())
+    fun fetchAllPost(climate: String, location: String): LiveData<Resource<ArrayList<Post>>> {
+        fetchAllPosts.execute(climate, location).subscribeOn(Schedulers.computation())
                 .doOnSuccess({posts->postsLiveData.postValue(Resource(ResourceState.SUCCESS,
                         posts, null))})
                 .doOnError({exception->postsLiveData.postValue(Resource(ResourceState.ERROR, null, exception.message))})

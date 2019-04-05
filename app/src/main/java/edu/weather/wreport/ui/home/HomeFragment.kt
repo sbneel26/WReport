@@ -1,4 +1,4 @@
-package edu.rush.myrush.ui.home
+package edu.weather.wreport.ui.home
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
@@ -11,14 +11,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dagger.android.support.AndroidSupportInjection
-import edu.weather.wreport.R
 import edu.weather.wreport.domain.model.Post
-import edu.weather.wreport.ui.home.HomeItemListAdapter
-import edu.weather.wreport.ui.home.HomeViewModel
 import edu.weather.wreport.util.Resource
 import kotlinx.android.synthetic.main.fragment_item.*
 import timber.log.Timber
 import javax.inject.Inject
+
+
 
 class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
@@ -38,9 +37,8 @@ class HomeFragment : Fragment() {
         super.onAttach(context)
     }
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater!!.inflate(R.layout.fragment_item, container, false)
+        return inflater!!.inflate(edu.weather.wreport.R.layout.fragment_item, container, false)
     }
-
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         Timber.i("View Created Called again")
@@ -52,13 +50,21 @@ class HomeFragment : Fragment() {
         item_list.layoutManager = LinearLayoutManager(activity)
         //homeAdapter = HomeItemListAdapter(arrayListOf())
         item_list.adapter = homeAdapter
-        homeViewModel.fetchAllPost().observe(this, Observer<Resource<List<Post>>> {
+    }
+
+    fun fetchResult(climate: String, location: String) {
+        homeViewModel.fetchAllPost(climate, location).observe(this, Observer<Resource<ArrayList<Post>>> {
             Timber.i("Post size ::" + it?.data?.size)
             updateItemList(it?.data)
         })
     }
 
-    private fun updateItemList(itemList: List<Post>?) {
+    fun refreshList() {
+        homeAdapter.clearData()
+        homeAdapter.notifyDataSetChanged()
+    }
+
+    private fun updateItemList(itemList: ArrayList<Post>?) {
         Timber.i("updated item called")
         itemList?.let { homeAdapter.set(it) }
     }
