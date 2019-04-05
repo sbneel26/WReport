@@ -192,9 +192,6 @@ class HomeActivity : BaseActivity(), AdapterView.OnItemSelectedListener, Progres
         val s = findViewById<Spinner>(edu.weather.wreport.R.id.climate_spinner)
         val a = s.adapter as BaseAdapter
         if (parent == s) {
-            val climateVal = climateSpinner.selectedItem.toString()
-            //if (gender == getString(edu.rush.mobile.R.string.gender)) {
-            //}
             a.notifyDataSetChanged()
         }
 
